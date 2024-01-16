@@ -1,4 +1,5 @@
 import { Icons } from '@/components/icons'
+import { Button } from '@/components/ui/button'
 import {
   Sheet,
   SheetContent,
@@ -7,9 +8,8 @@ import {
   SheetTrigger,
 } from '@/components/ui/sheet'
 import Link from 'next/link'
-import { Button } from './ui/button'
 
-export default function Navbar({}): any {
+export default function NavBar({}): any {
   return (
     <nav className="w-full backdrop-blur-md bg-white bg-opacity-30 z-50 fixed h-24 flex justify-between items-center py-10 px-4 md:px-8 lg:px-12 xl:px-16 2xl:px-24">
       <div className="gap-1 md:gap-2 lg:gap-4 hidden md:flex">
@@ -27,7 +27,7 @@ export default function Navbar({}): any {
           </Button>
         </Link>
       </div>
-      <Link href="">
+      <Link href="https://github.com/mazwrld/megu">
         <Button
           variant="default"
           className="rounded-full w-fit bg-orange-600 gap-2 items-center hidden md:flex"
@@ -44,7 +44,7 @@ export default function Navbar({}): any {
       <Sheet>
         <SheetTrigger className="block md:hidden p-3">
           <span className="text-2xl">
-            <Icons.gitHub className="h-5 w-5" />
+            <Icons.menu className="h-5 w-5" />
           </span>
         </SheetTrigger>
         <SheetContent>

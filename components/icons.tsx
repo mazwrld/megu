@@ -1,8 +1,9 @@
-import { LucideProps, type XIcon as LucideIcon } from 'lucide-react'
+import { LucideProps, Menu, type XIcon as LucideIcon } from 'lucide-react'
 
 export type Icon = typeof LucideIcon
 
 export const Icons = {
+  menu: Menu,
   gitHub: (props: LucideProps) => (
     <svg viewBox="0 0 438.549 438.549" {...props}>
       <path
