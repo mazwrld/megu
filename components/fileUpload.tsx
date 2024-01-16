@@ -7,7 +7,7 @@ import { Skeleton } from '@/components/ui/skeleton'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { useToast } from '@/components/ui/use-toast'
 import convertFile from '@/lib/convert'
-import { useEffect, useRef, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import ReactDropzone from 'react-dropzone'
 import {
   Select,
@@ -61,7 +61,6 @@ const extensions = {
 }
 
 export default function Dropzone() {
-  // variables & hooks
   const { toast } = useToast()
   const [is_hover, setIsHover] = useState<boolean>(false)
   const [actions, setActions] = useState<Action[]>([])
@@ -193,13 +192,22 @@ export default function Dropzone() {
       })
     )
   }
-  const checkIsReady = (): void => {
+  const checkIsReady = useCallback((): void => {
     let tmp_is_ready = true
     actions.forEach((action: Action) => {
       if (!action.to) tmp_is_ready = false
     })
     setIsReady(tmp_is_ready)
-  }
+  }, [actions])
+
+  useEffect(() => {
+    if (!actions.length) {
+      setIsDone(false)
+      setFiles([])
+      setIsReady(false)
+      setIsConverting(false)
+    } else checkIsReady()
+  }, [actions, checkIsReady])
   const deleteAction = (action: Action): void => {
     setActions(actions.filter((elt) => elt !== action))
     setFiles(files.filter((elt) => elt.name !== action.file_name))
@@ -211,7 +219,7 @@ export default function Dropzone() {
       setIsReady(false)
       setIsConverting(false)
     } else checkIsReady()
-  }, [actions])
+  }, [actions, checkIsReady])
   useEffect(() => {
     load()
   }, [])
