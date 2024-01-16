@@ -6,7 +6,13 @@ import { Button } from '@/components/ui/button'
 import { Skeleton } from '@/components/ui/skeleton'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { useToast } from '@/components/ui/use-toast'
+import bytesToSize from '@/lib/bytes-to-size'
+import compressFileName from '@/lib/compress-file-name'
 import convertFile from '@/lib/convert'
+import fileToIcon from '@/lib/file-to-icon'
+import loadFfmpeg from '@/lib/load-ffmpeg'
+import { Action } from '@/types/file-data'
+import { FFmpeg } from '@ffmpeg/ffmpeg'
 import { useCallback, useEffect, useRef, useState } from 'react'
 import ReactDropzone from 'react-dropzone'
 import {
@@ -16,13 +22,6 @@ import {
   SelectTrigger,
   SelectValue,
 } from './ui/select'
-
-import bytesToSize from '@/lib/bytes-to-size'
-import compressFileName from '@/lib/compress-file-name'
-import fileToIcon from '@/lib/file-to-icon'
-import loadFfmpeg from '@/lib/load-ffmpeg'
-import { Action } from '@/types/file-data'
-import { FFmpeg } from '@ffmpeg/ffmpeg'
 
 const extensions = {
   image: [
@@ -90,7 +89,6 @@ export default function Dropzone() {
     'video/*': [],
   }
 
-  // functions
   const reset = () => {
     setIsDone(false)
     setActions([])
@@ -98,11 +96,13 @@ export default function Dropzone() {
     setIsReady(false)
     setIsConverting(false)
   }
+
   const downloadAll = (): void => {
     for (let action of actions) {
       !action.is_error && download(action)
     }
   }
+
   const download = (action: Action) => {
     const a = document.createElement('a')
     a.style.display = 'none'
@@ -116,6 +116,7 @@ export default function Dropzone() {
     URL.revokeObjectURL(action.url)
     document.body.removeChild(a)
   }
+
   const convert = async (): Promise<any> => {
     let tmp_actions = actions.map((elt) => ({
       ...elt,
@@ -123,6 +124,7 @@ export default function Dropzone() {
     }))
     setActions(tmp_actions)
     setIsConverting(true)
+
     for (let action of tmp_actions) {
       try {
         const { url, output } = await convertFile(ffmpegRef.current, action)
@@ -155,10 +157,12 @@ export default function Dropzone() {
     setIsDone(true)
     setIsConverting(false)
   }
+
   const handleUpload = (data: Array<any>): void => {
     handleExitHover()
     setFiles(data)
     const tmp: Action[] = []
+
     data.forEach((file: any) => {
       const formData = new FormData()
       tmp.push({
@@ -175,8 +179,11 @@ export default function Dropzone() {
     })
     setActions(tmp)
   }
+
   const handleHover = (): void => setIsHover(true)
+
   const handleExitHover = (): void => setIsHover(false)
+
   const updateAction = (file_name: String, to: String) => {
     setActions(
       actions.map((action): Action => {
@@ -192,11 +199,14 @@ export default function Dropzone() {
       })
     )
   }
+
   const checkIsReady = useCallback((): void => {
     let tmp_is_ready = true
+
     actions.forEach((action: Action) => {
       if (!action.to) tmp_is_ready = false
     })
+
     setIsReady(tmp_is_ready)
   }, [actions])
 
@@ -208,10 +218,12 @@ export default function Dropzone() {
       setIsConverting(false)
     } else checkIsReady()
   }, [actions, checkIsReady])
+
   const deleteAction = (action: Action): void => {
     setActions(actions.filter((elt) => elt !== action))
     setFiles(files.filter((elt) => elt.name !== action.file_name))
   }
+
   useEffect(() => {
     if (!actions.length) {
       setIsDone(false)
@@ -220,9 +232,11 @@ export default function Dropzone() {
       setIsConverting(false)
     } else checkIsReady()
   }, [actions, checkIsReady])
+
   useEffect(() => {
     load()
   }, [])
+
   const load = async () => {
     const ffmpeg_response: FFmpeg = await loadFfmpeg()
     ffmpegRef.current = ffmpeg_response
