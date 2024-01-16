@@ -1,11 +1,18 @@
 import {
+  CheckCheck,
   File,
+  FileSymlink,
   FileText,
   Image,
+  Loader,
   LucideProps,
   Menu,
+  UploadCloud,
   Video,
+  Download,
+  ShieldAlert,
   Volume2,
+  X,
   type XIcon as LucideIcon,
 } from 'lucide-react'
 
@@ -18,6 +25,13 @@ export const Icons = {
   video: Video,
   image: Image,
   speaker: Volume2,
+  upload: UploadCloud,
+  symlink: FileSymlink,
+  close: X,
+  spinner: Loader,
+  done: CheckCheck,
+  download: Download,
+  error: ShieldAlert,
   gitHub: (props: LucideProps) => (
     <svg viewBox="0 0 438.549 438.549" {...props}>
       <path
