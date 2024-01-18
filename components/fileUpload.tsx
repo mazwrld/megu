@@ -71,7 +71,7 @@ export default function Dropzone() {
   const ffmpegRef = useRef<any>(null)
   const [defaultValues, setDefaultValues] = useState<string>('video')
   const [selected, setSelected] = useState<string>('...')
-  const accepted_files = {
+  const acceptedFiles = {
     'image/*': [
       '.jpg',
       '.jpeg',
@@ -425,7 +425,6 @@ export default function Dropzone() {
       onDrop={handleUpload}
       onDragEnter={handleHover}
       onDragLeave={handleExitHover}
-      accept={accepted_files}
       onDropRejected={() => {
         handleExitHover()
         toast({
@@ -444,6 +443,7 @@ export default function Dropzone() {
           duration: 5000,
         })
       }}
+      accept={acceptedFiles}
     >
       {({ getRootProps, getInputProps }) => (
         <div
